@@ -1,3 +1,4 @@
+import 'package:app_chatpdf/ui/addPdf/addPdf_screen.dart';
 import 'package:app_chatpdf/ui/home/widgets/chat_bubble.dart';
 import 'package:flutter/material.dart';
 
@@ -31,7 +32,21 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('ChatPDF'),
-        actions: [IconButton(onPressed: () {}, icon: const Icon(Icons.add))],
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) {
+                    return AddPdfScreen();
+                  },
+                ),
+              );
+            },
+            icon: const Icon(Icons.add),
+          ),
+        ],
       ),
       body: Column(
         children: [
@@ -59,7 +74,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     decoration: const InputDecoration(
                       filled: true,
                       fillColor: Colors.white,
-                      hintText: 'Digite sua mensagem...',
+                      hintText: 'Digite sua pergunta...',
                       border: InputBorder.none,
                       enabledBorder: InputBorder.none,
                       focusedBorder: InputBorder.none,
