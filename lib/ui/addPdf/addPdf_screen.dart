@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:app_chatpdf/ui/_core/app_requesters.dart';
 import 'package:app_chatpdf/ui/_core/listPdfs_provider.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -31,6 +34,22 @@ class AddPdfScreen extends StatelessWidget {
           icon: const Icon(Icons.arrow_back_ios_new_rounded),
           onPressed: () => Navigator.of(context).pop(),
         ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              if(listpdfsProvider.listPdfFiles.isNotEmpty){
+              final arquivos =
+                  listpdfsProvider.listPdfFiles
+                      .where((pf) => pf.path != null)
+                      .map((pf) => File(pf.path!))
+                      .toList();
+
+              AppRequesters().enviarPdfs(arquivos);
+              }
+            },
+            icon: Icon(Icons.upload_file_rounded),
+          ),
+        ],
         title: const Text('Adicionar PDFs'),
       ),
       body: Padding(
