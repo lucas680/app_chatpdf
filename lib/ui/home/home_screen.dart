@@ -13,6 +13,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final List<Map<String, String>> _messages = [];
   final TextEditingController _controller = TextEditingController();
+  final FocusNode _focusNode = FocusNode();
 
   void _sendMessage() async {
     final text = _controller.text.trim();
@@ -38,6 +39,12 @@ class _HomeScreenState extends State<HomeScreen> {
         });
       }
     }
+  }
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
   }
 
   @override
@@ -102,6 +109,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Expanded(
                   child: TextField(
                     controller: _controller,
+                    focusNode: _focusNode,
                     decoration: const InputDecoration(
                       filled: true,
                       fillColor: Colors.white,
@@ -111,7 +119,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       focusedBorder: InputBorder.none,
                     ),
                     onChanged: (_) => setState(() {}),
-                    onSubmitted: (_) => _sendMessage(),
+                    onSubmitted: (_) {
+                      if (_messages.isEmpty ||
+                          _messages.last['message'] != '⏳ Pensando...') {
+                        _sendMessage();
+                      }
+                      FocusScope.of(context).requestFocus(_focusNode);
+                    },
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -122,7 +136,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
                       color:
-                          _controller.text.trim().isNotEmpty
+                          (_controller.text.trim().isNotEmpty &&
+                                  (_messages.isEmpty ||
+                                      _messages.last['message'] !=
+                                          '⏳ Pensando...'))
                               ? Colors.blue
                               : Colors.white,
                       shape: BoxShape.circle,
@@ -130,7 +147,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Icon(
                       Icons.send,
                       color:
-                          _controller.text.trim().isNotEmpty
+                          (_controller.text.trim().isNotEmpty &&
+                                  (_messages.isEmpty ||
+                                      _messages.last['message'] !=
+                                          '⏳ Pensando...'))
                               ? Colors.white
                               : Colors.black54,
                     ),

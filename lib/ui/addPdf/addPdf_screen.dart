@@ -67,33 +67,22 @@ class _AddPdfScreenState extends State<AddPdfScreen> {
           onPressed: () => Navigator.of(context).pop(),
         ),
         actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 8),
-            child: SizedBox(
-              width: 42,
-              child:
-                  listpdfsProvider.listPdfFiles.isEmpty
-                      ? const Icon(Icons.upload_file_rounded)
-                      : IconButton(
-                        onPressed:
-                            loading
-                                ? null
-                                : () {
-                                  if (listpdfsProvider
-                                      .listPdfFiles
-                                      .isNotEmpty) {
-                                    final arquivos =
-                                        listpdfsProvider.listPdfFiles
-                                            .where((pf) => pf.path != null)
-                                            .map((pf) => File(pf.path!))
-                                            .toList();
+          IconButton(
+            onPressed:
+                (loading || listpdfsProvider.listPdfFiles.isEmpty)
+                    ? null
+                    : () {
+                      if (listpdfsProvider.listPdfFiles.isNotEmpty) {
+                        final arquivos =
+                            listpdfsProvider.listPdfFiles
+                                .where((pf) => pf.path != null)
+                                .map((pf) => File(pf.path!))
+                                .toList();
 
-                                    _enviarArquivos(arquivos);
-                                  }
-                                },
-                        icon: const Icon(Icons.upload_file_rounded),
-                      ),
-            ),
+                        _enviarArquivos(arquivos);
+                      }
+                    },
+            icon: const Icon(Icons.upload_file_rounded),
           ),
         ],
         title: const Text('Adicionar PDFs'),
